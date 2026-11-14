@@ -122,9 +122,10 @@ Let's see some examples of creating different types of events:
 class ExposedMasterCN(Vulnerability, Event):  
     """Explanation about this vulnerability and what it can do when exploited"""  
     def __init__(self, master_ip):  
-        Vulnerability.__init__(self, component=KubernetesCluster, name="Master Exposed From Certificate", category=InformationDisclosure)
+        Vulnerability.__init__(self, component=KubernetesCluster, name="Master Exposed From Certificate", category=InformationDisclosure, vid="KHV021")
         self.evidence = master_ip
 ```  
+`Notice:` Every vulnerability must be created with a `vid` that exists in the knowledge base (`docs/_kb/<vid>.md`, mirrored in `kube_hunter/core/kb.py`). The knowledge base page is the single source of truth for the vulnerability's severity, and creating a vulnerability with an unknown `vid` raises an error instead of producing a broken report entry.  
   
 ### Service  
 ```python  

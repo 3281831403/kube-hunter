@@ -32,6 +32,7 @@ class SecretsAccess(Vulnerability, Event):
             component=KubernetesCluster,
             name="Access to pod's secrets",
             category=AccessContainerServiceAccountTechnique,
+            vid="KHV035",
         )
         self.evidence = evidence
 

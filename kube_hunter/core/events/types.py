@@ -3,33 +3,9 @@ import threading
 import requests
 
 from kube_hunter.conf import get_config
+from kube_hunter.core.kb import get_severity
 from kube_hunter.core.types import KubernetesCluster
-from kube_hunter.core.types.vulnerabilities import (
-    GeneralSensitiveInformationTechnique,
-    ExposedSensitiveInterfacesTechnique,
-    MountServicePrincipalTechnique,
-    ListK8sSecretsTechnique,
-    AccessContainerServiceAccountTechnique,
-    AccessK8sApiServerTechnique,
-    AccessKubeletAPITechnique,
-    AccessK8sDashboardTechnique,
-    InstanceMetadataApiTechnique,
-    ExecIntoContainerTechnique,
-    SidecarInjectionTechnique,
-    NewContainerTechnique,
-    GeneralPersistenceTechnique,
-    HostPathMountPrivilegeEscalationTechnique,
-    PrivilegedContainerTechnique,
-    ClusterAdminBindingTechnique,
-    ARPPoisoningTechnique,
-    CoreDNSPoisoningTechnique,
-    DataDestructionTechnique,
-    GeneralDefenseEvasionTechnique,
-    ConnectFromProxyServerTechnique,
-    CVERemoteCodeExecutionCategory,
-    CVEPrivilegeEscalationCategory,
-    CVEDenialOfServiceTechnique,
-)
+from kube_hunter.core.types.vulnerabilities import ExposedSensitiveInterfacesTechnique
 
 logger = logging.getLogger(__name__)
 
@@ -117,37 +93,13 @@ class Service:
 
 
 class Vulnerability:
-    severity = dict(
-        {
-            GeneralSensitiveInformationTechnique: "low",
-            ExposedSensitiveInterfacesTechnique: "high",
-            MountServicePrincipalTechnique: "high",
-            ListK8sSecretsTechnique: "high",
-            AccessContainerServiceAccountTechnique: "low",
-            AccessK8sApiServerTechnique: "medium",
-            AccessKubeletAPITechnique: "medium",
-            AccessK8sDashboardTechnique: "medium",
-            InstanceMetadataApiTechnique: "high",
-            ExecIntoContainerTechnique: "high",
-            SidecarInjectionTechnique: "high",
-            NewContainerTechnique: "high",
-            GeneralPersistenceTechnique: "high",
-            HostPathMountPrivilegeEscalationTechnique: "high",
-            PrivilegedContainerTechnique: "high",
-            ClusterAdminBindingTechnique: "high",
-            ARPPoisoningTechnique: "medium",
-            CoreDNSPoisoningTechnique: "high",
-            DataDestructionTechnique: "high",
-            GeneralDefenseEvasionTechnique: "high",
-            ConnectFromProxyServerTechnique: "low",
-            CVERemoteCodeExecutionCategory: "high",
-            CVEPrivilegeEscalationCategory: "high",
-            CVEDenialOfServiceTechnique: "medium",
-        }
-    )
-
-    # TODO: make vid mandatory once migration is done
-    def __init__(self, component, name, category=None, vid="None"):
+    # The severity of a vulnerability is determined solely by its vid,
+    # according to the knowledge base (see kube_hunter/core/kb.py).
+    # This guarantees the same vid is reported with the same severity
+    # no matter which hunter or code path produced it.
+    def __init__(self, component, name, category=None, vid=None):
+        # raises UnknownVulnerabilityIdError for vids with no knowledge base page
+        get_severity(vid)
         self.vid = vid
         self.component = component
         self.category = category
@@ -169,7 +121,7 @@ class Vulnerability:
         return self.__doc__
 
     def get_severity(self):
-        return self.severity.get(self.category, "low")
+        return get_severity(self.vid)
 
 
 event_id_count_lock = threading.Lock()

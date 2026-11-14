@@ -116,6 +116,7 @@ class CreateANamespace(Vulnerability, Event):
             self,
             KubernetesCluster,
             name="Created a namespace",
+            vid="KHV008",
             category=GeneralDefenseEvasionTechnique,
         )
         self.evidence = evidence
@@ -130,6 +131,7 @@ class DeleteANamespace(Vulnerability, Event):
             self,
             KubernetesCluster,
             name="Delete a namespace",
+            vid="KHV009",
             category=DataDestructionTechnique,
         )
         self.evidence = evidence
@@ -141,7 +143,13 @@ class CreateARole(Vulnerability, Event):
     """
 
     def __init__(self, evidence):
-        Vulnerability.__init__(self, KubernetesCluster, name="Created a role", category=GeneralDefenseEvasionTechnique)
+        Vulnerability.__init__(
+            self,
+            KubernetesCluster,
+            name="Created a role",
+            category=GeneralDefenseEvasionTechnique,
+            vid="KHV010",
+        )
         self.evidence = evidence
 
 
@@ -155,6 +163,7 @@ class CreateAClusterRole(Vulnerability, Event):
             self,
             KubernetesCluster,
             name="Created a cluster role",
+            vid="KHV011",
             category=ClusterAdminBindingTechnique,
         )
         self.evidence = evidence
@@ -170,6 +179,7 @@ class PatchARole(Vulnerability, Event):
             self,
             KubernetesCluster,
             name="Patched a role",
+            vid="KHV012",
             category=ClusterAdminBindingTechnique,
         )
         self.evidence = evidence
@@ -185,6 +195,7 @@ class PatchAClusterRole(Vulnerability, Event):
             self,
             KubernetesCluster,
             name="Patched a cluster role",
+            vid="KHV013",
             category=ClusterAdminBindingTechnique,
         )
         self.evidence = evidence
@@ -198,6 +209,7 @@ class DeleteARole(Vulnerability, Event):
             self,
             KubernetesCluster,
             name="Deleted a role",
+            vid="KHV014",
             category=DataDestructionTechnique,
         )
         self.evidence = evidence
@@ -211,6 +223,7 @@ class DeleteAClusterRole(Vulnerability, Event):
             self,
             KubernetesCluster,
             name="Deleted a cluster role",
+            vid="KHV015",
             category=DataDestructionTechnique,
         )
         self.evidence = evidence
@@ -224,6 +237,7 @@ class CreateAPod(Vulnerability, Event):
             self,
             KubernetesCluster,
             name="Created A Pod",
+            vid="KHV016",
             category=NewContainerTechnique,
         )
         self.evidence = evidence
@@ -237,6 +251,7 @@ class CreateAPrivilegedPod(Vulnerability, Event):
             self,
             KubernetesCluster,
             name="Created A PRIVILEGED Pod",
+            vid="KHV017",
             category=PrivilegedContainerTechnique,
         )
         self.evidence = evidence
@@ -250,6 +265,7 @@ class PatchAPod(Vulnerability, Event):
             self,
             KubernetesCluster,
             name="Patched A Pod",
+            vid="KHV018",
             category=SidecarInjectionTechnique,
         )
         self.evidence = evidence
@@ -263,6 +279,7 @@ class DeleteAPod(Vulnerability, Event):
             self,
             KubernetesCluster,
             name="Deleted A Pod",
+            vid="KHV019",
             category=DataDestructionTechnique,
         )
         self.evidence = evidence
